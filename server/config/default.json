@@ -1,0 +1,41 @@
+{
+  "host": "localhost",
+  "port": 3030,
+  "public": "../public/",
+  "paginate": {
+    "default": 10,
+    "max": 50
+  },
+  "permission": {
+    "vistor": 1,
+    "common": 2,
+    "admin": 3,
+    "superadmin": 5
+  },
+  "captchaexpire": 2, //min 
+  "authentication": {
+    "secret": "82c7fb2d13e58b2fa45c1215bd39f9805d065efa9e5a36a23c9aa35bab35881ed5eb39d0be8bd9329ac73b4eee48311cce2178a7fc688f8aa7e9abbbb9dffd1e4596e7255b2c1af52dfc037e7aec9cba4f495dcf9834735624409c2cbb802a59a794a79e52ea5642278f98a0eaeb9b3999edc93957a0f0d27c2d56c01108151b9e04b1c215839070243f196ae392bd096a9a06e22379f033f24f8daf43c4036ae91730a79d516018faaf8a7522f1af4b628d8050422fddd0fc3c362a797162b70ecca9cdb58858b2fb630c533e22d2f9e2659f045aa6700fe70be702d2f56292177f9a11b7fd833acc82e368faf57024f35359639613af0d163779e5a18d2be6",
+    "strategies": [
+      "jwt",
+      "local"
+    ],
+    "path": "/api/v1/authentication",
+    "service": "api/v1/users",
+    "jwt": {
+      "header": {
+        "typ": "access"
+      },
+      "audience": "https://exiaozhu.com",
+      "subject": "anonymous",
+      "issuer": "exiaozhu",
+      "algorithm": "HS256",
+      "expiresIn": "1d"
+    },
+    "local": {
+      "entity": "users",
+      "usernameField": "username",
+      "passwordField": "password"
+    }
+  },
+  "mongodb": "mongodb://localhost:27017/e_xiaozhu"
+}

@@ -1,0 +1,16 @@
+.login-form {
+  margin-top: 30px;
+}
+
+.login-form-forgot {
+  float: right;
+}
+
+.login-form-remember {
+  float: left;
+}
+
+.login-form-button {
+  width: 100%;
+  margin-bottom: 20px;
+}

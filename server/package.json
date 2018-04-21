@@ -1,0 +1,57 @@
+{
+  "name": "e-xiaozhu",
+  "description": "A app to make life easier.",
+  "version": "0.0.0",
+  "homepage": "",
+  "main": "src",
+  "keywords": [
+    "feathers"
+  ],
+  "author": {
+    "name": "I308845",
+    "email": "biao.hao@sap.com"
+  },
+  "contributors": [],
+  "bugs": {},
+  "directories": {
+    "lib": "src",
+    "test": "test/"
+  },
+  "engines": {
+    "node": "^9.0.0",
+    "npm": ">= 3.0.0"
+  },
+  "scripts": {
+    "test": "npm run eslint && npm run mocha",
+    "eslint": "eslint src/. test/. --config .eslintrc.json",
+    "start": "node --inspect src/",
+    "mocha": "mocha test/ --recursive --exit"
+  },
+  "dependencies": {
+    "@feathersjs/authentication": "^2.1.4",
+    "@feathersjs/authentication-jwt": "^2.0.0",
+    "@feathersjs/authentication-local": "^1.1.1",
+    "@feathersjs/configuration": "^1.0.2",
+    "@feathersjs/errors": "^3.3.0",
+    "@feathersjs/express": "^1.2.1",
+    "@feathersjs/feathers": "^3.1.3",
+    "@feathersjs/socketio": "^3.2.1",
+    "compression": "^1.7.2",
+    "cors": "^2.8.4",
+    "feathers-hooks-common": "^4.11.0",
+    "feathers-mongoose": "^6.1.0",
+    "helmet": "^3.12.0",
+    "jwt-decode": "^2.2.0",
+    "mongoose": "^5.0.14",
+    "prop-types": "^15.6.1",
+    "serve-favicon": "^2.4.5",
+    "svg-captcha": "^1.3.11",
+    "winston": "^2.4.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "mocha": "^5.0.4",
+    "request": "^2.85.0",
+    "request-promise": "^4.2.2"
+  }
+}
