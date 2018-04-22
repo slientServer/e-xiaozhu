@@ -1,5 +1,5 @@
 import { START_REQUEST, FINISH_REQUEST, LOGIN_SUCCESS, CAPTCHA_UPDATED } from './types';
-import { getRes, postRes } from '../utils/request';
+import { getRes, postRes, deleteRes } from '../utils/request';
 import token from '../utils/tokenHelper';
 import jwtDecode from 'jwt-decode';
 import { message } from 'antd';
@@ -115,5 +115,32 @@ export const captchaAction = (history) => {
       },
       dispatch: dispatch
     });
+  }
+}
+
+export const logoutAction = (history) => {
+  return function (dispatch) {
+    dispatch({
+      type: START_REQUEST
+    });
+    deleteRes({
+      url: '/api/v1/authentication/',
+      msg: 'Logout successfully!',
+      headers: {
+        'Authorization': token.getToken()
+      },
+      errorHandler: () => {
+        token.destoryToken();
+        history.push('/index');
+      },
+      handler: (resData) => {
+       dispatch({
+          type: FINISH_REQUEST
+        });
+        token.destoryToken();
+        history.push('/index');
+      },
+      dispatch: dispatch
+    });    
   }
 }

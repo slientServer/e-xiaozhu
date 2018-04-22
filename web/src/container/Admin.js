@@ -7,6 +7,7 @@ import * as actions from '../actions/auth';
 import { connect } from 'react-redux';
 import { Spin } from 'antd';
 import token from '../utils/tokenHelper';
+import AdminLayout from '../components/admin/layout';
 
 class Admin extends Component {
   componentWillMount () {
@@ -19,15 +20,17 @@ class Admin extends Component {
 
   render () {
     return <Spin spinning = { this.props.fetching }>
-      {adminRoutes()}
+      <AdminLayout history={this.props.history}>
+        {adminRoutes()}
+      </AdminLayout>
     </Spin>;
   }
 }
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    auth: state.authReducer.auth,
-    fetching: state.commonReducer.fetching
+    auth: state.authReducer && state.authReducer.auth,
+    fetching: state.commonReducer && state.commonReducer.fetching
   }
 }
 
