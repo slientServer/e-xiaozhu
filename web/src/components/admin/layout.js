@@ -11,31 +11,45 @@ const MenuItemGroup = Menu.ItemGroup;
 class AdminLayout extends Component {
   constructor () {
     super();
-    this.headerMenuClick = this.headerMenuClick.bind(this);
+    this.menuClick = this.menuClick.bind(this);
   }
 
-  headerMenuClick = (evt) => {
+  menuClick = (evt) => {
     switch(evt.key){
       case 'log_out':
         this.props.logoutAction(this.props.history);
       break;
+      case '/admin':
+        this.props.history.push('/admin');
+      break;
+      case '/admin/users':
+        this.props.history.push('/admin/users');
+      break;
       default:
+        this.props.history.push('/');
     }
   }
 
   render () {
     const user_photo="http://img5.duitang.com/uploads/item/201406/07/20140607132024_NHEjK.jpeg";
+    const menu_list=[
+      {'key': '/admin',
+       'icon': 'home',
+       'name': '首页'
+      },
+      {'key': '/admin/users',
+       'icon': 'user',
+       'name': '用户中心'
+      }
+    ].map((item) => <Menu.Item key={item.key}><Icon type={item.icon} /><span>{item.name}</span></Menu.Item>);
 
     return <Layout>
       <Sider trigger={null}
         collapsible
         collapsed={this.props.collapsed}>
         <div className="logo" />
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={['home']}>
-          <Menu.Item key="home">
-            <Icon type="home" />
-            <span>首页</span>
-          </Menu.Item>
+        <Menu theme="dark" mode="inline" defaultSelectedKeys={[this.props.history.location.pathname]} onClick={this.menuClick}>
+          {menu_list}
         </Menu>
       </Sider>
       <Layout>
@@ -51,7 +65,7 @@ class AdminLayout extends Component {
             <Col span={3} offset={20}>
               <Menu
                 mode="horizontal"
-                onClick={this.headerMenuClick}
+                onClick={this.menuClick}
               >
                 <SubMenu title={<Badge count="100"><Icon type="notification" /></Badge>}/>
                 <SubMenu title={<Avatar src={user_photo} size="default">{this.props.username}</Avatar>}>

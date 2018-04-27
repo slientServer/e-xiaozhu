@@ -12,9 +12,9 @@ import { FINISH_REQUEST } from '../actions/types';
  * @param msg       接口异常提示
  * @param headers   接口所需header配置
  */
-export const getRes = ({url, msg = 'Bad request!', handler, dispatch, headers, errorHandler}) =>
-    axios.get(url, {'headers': headers}).then(res => {
-      dispatch({
+export const getRes = ({url, msg = 'Bad request!', handler, dispatch, headers, errorHandler, params}) =>
+    axios.get(url, {'headers': headers, 'params': (params || {})}).then(res => {
+      dispatch && dispatch({
         type: FINISH_REQUEST
       });
       if(res.status === 200){
@@ -23,7 +23,7 @@ export const getRes = ({url, msg = 'Bad request!', handler, dispatch, headers, e
         message.warn(res.statusText);
       }
     }).catch(err => {
-      dispatch({
+      dispatch && dispatch({
         type: FINISH_REQUEST
       });
       errorHandler && errorHandler();
@@ -39,7 +39,7 @@ export const getRes = ({url, msg = 'Bad request!', handler, dispatch, headers, e
  */
 export const postRes = ({url, data, msg = 'Bad request!', handler, dispatch, headers, errorHandler}) =>
     axios.post(url, data, {'headers': headers}).then(res => {
-      dispatch({
+      dispatch && dispatch({
         type: FINISH_REQUEST
       });
       if(res.status === 201){
@@ -48,7 +48,7 @@ export const postRes = ({url, data, msg = 'Bad request!', handler, dispatch, hea
         message.warn(res.statusText);
       }
     }).catch(err => {
-      dispatch({
+      dispatch && dispatch({
         type: FINISH_REQUEST
       });
       errorHandler && errorHandler();
@@ -64,7 +64,7 @@ export const postRes = ({url, data, msg = 'Bad request!', handler, dispatch, hea
  */
 export const putRes = ({url, data, msg = 'Bad request!', handler, dispatch, headers, errorHandler}) =>
     axios.put(url, data, {'headers': headers}).then(res => {
-      dispatch({
+      dispatch && dispatch({
         type: FINISH_REQUEST
       });      
       if(res.status === 201){
@@ -73,7 +73,32 @@ export const putRes = ({url, data, msg = 'Bad request!', handler, dispatch, head
         message.warn(res.statusText);
       }
     }).catch(err => {
-      dispatch({
+      dispatch && dispatch({
+        type: FINISH_REQUEST
+      });
+      errorHandler && errorHandler();
+      message.error(err.response.data.message || msg);
+    });
+
+/**
+ * @Patch
+ * @param url       接口地址
+ * @param data      接口参数
+ * @param msg       接口异常提示
+ * @param headers   接口所需header配置
+ */
+export const patchRes = ({url, data, msg = 'Bad request!', handler, dispatch, headers, errorHandler}) =>
+    axios.patch(url, data, {'headers': headers}).then(res => {
+      dispatch && dispatch({
+        type: FINISH_REQUEST
+      });      
+      if(res.status === 200){
+        handler(res.data)
+      } else {
+        message.warn(res.statusText);
+      }
+    }).catch(err => {
+      dispatch && dispatch({
         type: FINISH_REQUEST
       });
       errorHandler && errorHandler();
@@ -89,7 +114,7 @@ export const putRes = ({url, data, msg = 'Bad request!', handler, dispatch, head
  */
 export const deleteRes = ({url, msg = 'Bad request!', handler, dispatch, headers, errorHandler}) =>
     axios.delete(url, {'headers': headers}).then(res => {
-      dispatch({
+      dispatch && dispatch({
         type: FINISH_REQUEST
       });      
       if(res.status === 200){
@@ -98,7 +123,7 @@ export const deleteRes = ({url, msg = 'Bad request!', handler, dispatch, headers
         message.warn(res.statusText);
       }
     }).catch(err => {
-      dispatch({
+      dispatch && dispatch({
         type: FINISH_REQUEST
       });
       errorHandler && errorHandler();

@@ -1,8 +1,8 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
 const { captchaVerify } = require('../../hooks/captcha');
-const { iff } = require('feathers-hooks-common');
-const jwtDecode = require('jwt-decode');
-const { NotAuthenticated } = require('@feathersjs/errors');
+const { permissionCheck } = require('../../hooks/permission');
+const { disable } = require('feathers-hooks-common');
+const searchRegex = require('../../hooks/searchRegex');
 
 const {
   hashPassword, protect
@@ -11,24 +11,12 @@ const {
 module.exports = {
   before: {
     all: [],
-    find: [authenticate('jwt') ],
-    get: iff(
-      context => {
-        let params = jwtDecode(context.params.headers.authorization);
-        if (params.permission >= context.app.get('permission').admin || params.usersId === context.id) {
-          return true;
-        } else {
-          return false;
-        }
-      },
-      [authenticate('jwt') ]
-    ).else(() => {
-      throw new NotAuthenticated('Permission denied!');
-    }),
+    find: [ permissionCheck(), searchRegex()],
+    get: [ permissionCheck() ],
     create: [ captchaVerify(), hashPassword() ],
-    update: [ hashPassword(),  authenticate('jwt') ],
-    patch: [ hashPassword(),  authenticate('jwt') ],
-    remove: [ authenticate('jwt') ]
+    update: [ disable(), hashPassword(),  authenticate('jwt') ],
+    patch: [ permissionCheck(), hashPassword() ],
+    remove: [ permissionCheck() ]
   },
 
   after: {

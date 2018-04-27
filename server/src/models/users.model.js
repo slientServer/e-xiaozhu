@@ -11,8 +11,14 @@ module.exports = function (app) {
     role: { type: String, default: 'user' },
     phone: { type: String },
     permission: {type: Number, default: 1},
-    email: {type: String}
-  
+    email: {type: String},
+    group: {type: String},
+    gender: {type: String, default: 'male', enum: ['male', 'female']},
+    address: {type: String},
+    age: {type: Number},
+    education: {type: String, enum: ['doctor', 'master', 'bachelor', 'highschool', 'others']},
+    univeristy: {type: String},
+    source: {type: String, default: 'register'}
   
   }, {
     timestamps: true
