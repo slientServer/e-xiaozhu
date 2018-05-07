@@ -18,7 +18,8 @@ module.exports = function (app) {
     age: {type: Number},
     education: {type: String, enum: ['doctor', 'master', 'bachelor', 'highschool', 'others']},
     univeristy: {type: String},
-    source: {type: String, default: 'register'}
+    source: {type: String, default: 'register'},
+    projects: {type: Array}
   
   }, {
     timestamps: true

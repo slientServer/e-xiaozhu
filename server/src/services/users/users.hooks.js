@@ -1,4 +1,3 @@
-const { authenticate } = require('@feathersjs/authentication').hooks;
 const { captchaVerify } = require('../../hooks/captcha');
 const { permissionCheck } = require('../../hooks/permission');
 const { disable } = require('feathers-hooks-common');
@@ -14,7 +13,7 @@ module.exports = {
     find: [ permissionCheck(), searchRegex()],
     get: [ permissionCheck() ],
     create: [ captchaVerify(), hashPassword() ],
-    update: [ disable(), hashPassword(),  authenticate('jwt') ],
+    update: [ disable(), hashPassword(),  permissionCheck() ],
     patch: [ permissionCheck(), hashPassword() ],
     remove: [ permissionCheck() ]
   },

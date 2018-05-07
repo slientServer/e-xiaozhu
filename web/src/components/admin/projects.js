@@ -1,7 +1,7 @@
 import React from 'react';
 import CurdComp from '../common/curdcomp';
 
-function Users(){
+function Projects(){
   const columns = [
     { title: '用户名', width: 200, dataIndex: 'username', key: 'username', fixed: 'left', sorter: true, editable: true },
     { title: '性别', dataIndex: 'gender', key: 'gender', sorter: true, filters: [
@@ -18,35 +18,9 @@ function Users(){
     searchKey: 'username',
     tooltip: '请输入用户名...', 
     actions: ['add', 'delete'],
-    url: '/api/v1/users',
-    addConfig: [
-      {
-        type: 'Input',
-        label: '用户名',
-        key: 'username',
-        required: true
-      }, {
-        type: 'Select',
-        key: 'gender',
-        label: '性别',
-        options: [{key: 'male', label: '男'}, {key: 'female', label: '女'}],
-        defaultValue: 'male',
-        required: true
-      }, {
-        type: 'Input',
-        label: '手机',
-        key: 'phone',
-        required: true        
-      }, {
-        type: 'Input',
-        label: '邮箱',
-        key: 'email',
-        required: true,
-        validType: 'email'       
-      }
-    ]
+    url: '/api/v1/projects'
   };
   return <CurdComp columns={columns} configuration={configuration} />;
 }
 
-export default Users;
+export default Projects;

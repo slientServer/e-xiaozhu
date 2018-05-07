@@ -4,7 +4,8 @@ import { Breadcrumb } from 'antd';
 function BreadcrumbComp(props) {
   const map = {
     'admin': '首页',
-    'users': '用户中心'
+    'users': '用户中心',
+    'projects': '项目管理'
   };
   const paths = props.history.location.pathname.split('/');
   const list=paths.filter((item)=> !!item).map((item) => {

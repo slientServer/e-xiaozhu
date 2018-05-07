@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { Table, message, Row, Col, Input, Popconfirm, Button } from 'antd';
+import { Table, message, Row, Col, Input, Popconfirm, Button, Modal, Form, Select } from 'antd';
 import EditableCell from './editablecell';
 import { getRes, postRes, patchRes, deleteRes } from '../../utils/request';
 import token from '../../utils/tokenHelper';
 const Search = Input.Search;
+const FormItem = Form.Item;
+const Option = Select.Option;
 
 class CurdComp extends Component {
   constructor (props) {
@@ -40,7 +42,9 @@ class CurdComp extends Component {
       fetching: false,
       data: [],
       pagination: {},
-      searchStr : ''
+      searchStr : '',
+      visible: false,
+      confirmLoading: false
     };
     this.onTableUpdate = this.onTableUpdate.bind(this);
     this.requestDataByParams = this.requestDataByParams.bind(this);
@@ -48,6 +52,7 @@ class CurdComp extends Component {
     this.deleteItem = this.deleteItem.bind(this);
     this.onCellChange = this.onCellChange.bind(this);
     this.onAdd = this.onAdd.bind(this);
+    this.addExec = this.addExec.bind(this);
   }
 
   deleteItem (id) {
@@ -97,33 +102,41 @@ class CurdComp extends Component {
   }
 
   onAdd = () => {
-    const { data } = this.state;
-    this.setState({
-      fetching: true
-    });
-    postRes({
-      'url': this.props.configuration.url, 
-      'headers': {
-        'Authorization': token.getToken()
-      },
-      data: {
-        username: 'Add_User_' + new Date().valueOf(),
-        password: 'pwd',
-        email: new Date().valueOf(),
-        source: 'add'
-      },
-      'handler': (resData) => {
+    this.setState({visible: true});
+  }
+
+  addExec = (e) => {
+    e.preventDefault();
+    this.props.form.validateFields((err, value) => {
+      if(!err){
         this.setState({
-          data: [resData, ...data],
-          fetching: false
+          confirmLoading: true
         });
-        message.success('数据添加成功！');
-      },
-      'errorHandler': (err) => {
-        this.setState({
-          fetching: false
+        postRes({
+          'url': this.props.configuration.url, 
+          'headers': {
+            'Authorization': token.getToken()
+          },
+          data: {
+            ...value,
+            source: 'admin-add'
+          },
+          'handler': (resData) => {
+            this.setState({
+              data: [resData, ...this.state.data],
+              confirmLoading: false,
+              visible: false
+            });
+            message.success('数据添加成功！');
+          },
+          'errorHandler': (err) => {
+            this.setState({
+              confirmLoading: false,
+              visible: false
+            });
+            message.error('数据添加失败!');
+          }
         });
-        message.error('数据添加失败!');
       }
     });
   }
@@ -188,6 +201,17 @@ class CurdComp extends Component {
   }
 
   render () {
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 5 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 12 },
+      },
+    };
+    const { getFieldDecorator } = this.props.form;
     return <div>
     <Row gutter={16} type="flex" justify="end" style={{'margin': '0 0 10px 0'}}>
       <Col>
@@ -204,8 +228,49 @@ class CurdComp extends Component {
       </Col>
     </Row>
     <Table size="small" filterMultiple={true} rowKey={record => record._id} onChange={this.onTableUpdate} bordered={true} loading={this.state.fetching} columns={this.state.columns} dataSource={this.state.data} pagination={this.state.pagination} scroll={{ x: 400 }} />
+    <Modal title="添加"
+      visible={this.state.visible}
+      onOk={this.addExec}
+      confirmLoading={this.state.confirmLoading}
+      onCancel={() => {this.setState({visible: false});}}
+    >
+      <Form>
+        {this.props.configuration.addConfig.map((item) => {
+          switch(item.type){
+            case 'Input': 
+              return <FormItem {...formItemLayout} label={item.label} key={item.key}>
+                {getFieldDecorator(item.key, {
+                  initialValue: item.defaultValue,
+                  rules: [
+                    { required: item.required, message: '必填项!' },
+                    { type: item.validType, message: '请输入正确的类型!'}
+                  ],
+                })(
+                  <Input />
+                )}
+              </FormItem>;
+            case 'Select':
+              return <FormItem {...formItemLayout} label={item.label} key={item.key}>
+                {getFieldDecorator(item.key, {
+                  initialValue: item.defaultValue,
+                  rules: [
+                    { required: item.required, message: '必填项!' },
+                    { type: item.validType, message: '请输入正确的类型!'}
+                  ],
+                })(
+                  <Select>
+                    {item.options.map((option) => <Option key={option.key} value={option.key}>{option.label}</Option>)}
+                  </Select>
+                )}
+              </FormItem>;            
+            default: 
+              return '';
+          }
+        })}
+      </Form>
+    </Modal>    
     </div>;
   }
 }
 
-export default CurdComp;
+export default Form.create()(CurdComp);
