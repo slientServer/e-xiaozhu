@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Table, message, Row, Col, Input, Popconfirm, Button, Modal, Form, Select } from 'antd';
+import { Table, message, Row, Col, Input, Popconfirm, Button, Modal, Form, Select, InputNumber } from 'antd';
 import EditableCell from './editablecell';
 import { getRes, postRes, patchRes, deleteRes } from '../../utils/request';
 import token from '../../utils/tokenHelper';
 const Search = Input.Search;
 const FormItem = Form.Item;
 const Option = Select.Option;
+const { TextArea } = Input;
 
 class CurdComp extends Component {
   constructor (props) {
@@ -25,8 +26,9 @@ class CurdComp extends Component {
     if (this.props.configuration.actions && this.props.configuration.actions.length > 0) {
       columns.push({
         title: '操作',
-        width: 200,
+        width: 100,
         key: 'action',
+        fixed: 'right',
         render: (text, record) => (
           <span>
             {(this.props.configuration.actions.indexOf('delete') !== -1) &&
@@ -204,7 +206,7 @@ class CurdComp extends Component {
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 5 },
+        sm: { span: 6 },
       },
       wrapperCol: {
         xs: { span: 24 },
@@ -227,7 +229,7 @@ class CurdComp extends Component {
         {this.props.configuration.actions.indexOf('add') !== -1 &&  <Button type="primary" icon="plus-square-o" size="small" style={{marginLeft: "20px"}} onClick={this.onAdd} ghost>Add</Button>}
       </Col>
     </Row>
-    <Table size="small" filterMultiple={true} rowKey={record => record._id} onChange={this.onTableUpdate} bordered={true} loading={this.state.fetching} columns={this.state.columns} dataSource={this.state.data} pagination={this.state.pagination} scroll={{ x: 400 }} />
+    <Table size="small" filterMultiple={true} rowKey={record => record._id} onChange={this.onTableUpdate} loading={this.state.fetching} columns={this.state.columns} dataSource={this.state.data} pagination={this.state.pagination} scroll={{ x: 1500 }} />
     <Modal title="添加"
       visible={this.state.visible}
       onOk={this.addExec}
@@ -247,6 +249,29 @@ class CurdComp extends Component {
                   ],
                 })(
                   <Input />
+                )}
+              </FormItem>;
+            case 'InputNumber': 
+              return <FormItem {...formItemLayout} label={item.label} key={item.key}>
+                {getFieldDecorator(item.key, {
+                  initialValue: item.defaultValue,
+                  rules: [
+                    { required: item.required, message: '必填项!' },
+                  ],
+                })(
+                  <InputNumber />
+                )}
+              </FormItem>;
+            case 'TextArea': 
+              return <FormItem {...formItemLayout} label={item.label} key={item.key}>
+                {getFieldDecorator(item.key, {
+                  initialValue: item.defaultValue,
+                  rules: [
+                    { required: item.required, message: '必填项!' },
+                    { type: item.validType, message: '请输入正确的类型!'}
+                  ],
+                })(
+                  <TextArea />
                 )}
               </FormItem>;
             case 'Select':

@@ -3,7 +3,7 @@ import CurdComp from '../common/curdcomp';
 
 function Users(){
   const columns = [
-    { title: '用户名', width: 200, dataIndex: 'username', key: 'username', fixed: 'left', sorter: true, editable: true },
+    { title: '用户名', width: 150, dataIndex: 'username', key: 'username', fixed: 'left', sorter: true, editable: true },
     { title: '性别', dataIndex: 'gender', key: 'gender', sorter: true, filters: [
         { text: '男', value: 'male' },
         { text: '女', value: 'female' }
