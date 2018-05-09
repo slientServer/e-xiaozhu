@@ -25,9 +25,6 @@ class AdminLayout extends Component {
       case '/admin/users':
         this.props.history.push('/admin/users');
       break;
-      case '/admin/projects':
-        this.props.history.push('/admin/projects');
-      break;
       default:
         this.props.history.push('/');
     }
@@ -43,11 +40,7 @@ class AdminLayout extends Component {
       {'key': '/admin/users',
        'icon': 'user',
        'name': '用户中心'
-      },
-      {'key': '/admin/projects',
-       'icon': 'bars',
-       'name': '项目管理'
-      }      
+      }     
     ].map((item) => <Menu.Item key={item.key}><Icon type={item.icon} /><span>{item.name}</span></Menu.Item>);
 
     return <Layout>

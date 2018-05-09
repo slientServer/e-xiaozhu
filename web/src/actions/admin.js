@@ -1,5 +1,5 @@
 import { TOGGLE_COLLAPSED, START_REQUEST, FINISH_REQUEST, USER_LIST_SUCCESS } from './types';
-import { getRes, postRes, deleteRes } from '../utils/request';
+import { getRes } from '../utils/request';
 import token from '../utils/tokenHelper';
 
 export const toggleCollapsedAction = () => {
