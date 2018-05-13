@@ -2,6 +2,7 @@ const authentication = require('@feathersjs/authentication');
 const jwt = require('@feathersjs/authentication-jwt');
 const local = require('@feathersjs/authentication-local');
 const { captchaVerify } = require('./hooks/captcha');
+const { addToBlacklist } = require('./hooks/blacklist');
 
 module.exports = function (app) {
   const config = app.get('authentication');
@@ -25,10 +26,16 @@ module.exports = function (app) {
             permission: context.params.users.permission,
             username: context.params.users.username
           });
+          if (context.data.remember) {
+            Object.assign(context.params, {
+              'jwt': {'expiresIn': '7d'}
+            });            
+          }
         }
       ],
       remove: [
-        authentication.hooks.authenticate('jwt')
+        authentication.hooks.authenticate('jwt'),
+        addToBlacklist()
       ]
     }
   });

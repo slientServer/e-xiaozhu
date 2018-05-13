@@ -1,8 +1,8 @@
-const { permissionCheck } = require('../../hooks/permission');
+const { disable } = require('feathers-hooks-common');
 
 module.exports = {
   before: {
-    all: [ permissionCheck() ],
+    all: [disable()],
     find: [],
     get: [],
     create: [],

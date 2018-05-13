@@ -6,6 +6,10 @@
     "default": 10,
     "max": 50
   },
+  "wechat": {
+    "appid": "wx4c8a7d8a187ca0fe",
+    "appsecret": "94cd861586fecdc0d38745b49828c9af"
+  },
   "permission": {
     "vistor": 1,
     "common": 2,
@@ -29,7 +33,7 @@
       "subject": "anonymous",
       "issuer": "exiaozhu",
       "algorithm": "HS256",
-      "expiresIn": "1d"
+      "expiresIn": "1h"
     },
     "local": {
       "entity": "users",

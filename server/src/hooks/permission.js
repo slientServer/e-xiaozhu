@@ -6,19 +6,20 @@ const { NotAuthenticated } = require('@feathersjs/errors');
 
 module.exports.permissionCheck = function () {
   return (iff(
-    context => {
+    async context => {
       if (!context.params.provider) {
         return true;
       } else {
         let params = jwtDecode(context.params.headers.authorization);
-        if (params.permission >= context.app.get('permission').admin || params.usersId === context.id) {
+        if ((params.permission >= context.app.get('permission').admin || params.usersId === context.id) && (await context.app.service('/blacklist').verifyValidation(context.params.headers.authorization))) {
+          
           return true;
         } else {
           return false;
         }
       }
     },
-    [authenticate('jwt') ]
+    [authenticate('jwt')]
   ).else(() => {
     throw new NotAuthenticated('Permission denied!');
   }));
